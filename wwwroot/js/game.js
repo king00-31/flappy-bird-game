@@ -32,7 +32,7 @@ const birdObj = {
 
 const pipeObj = {
     width: 60,
-    gap: 120,  // Daha dar aralık - oyunu zorlaştır
+    gap: 150,  // Biraz daha açık aralık
     speed: 1.5  // Daha yavaş hareket
 };
 
@@ -169,6 +169,9 @@ function resetGame() {
     if (animationId) {
         cancelAnimationFrame(animationId);
     }
+    
+    // İlk boruyu hemen ekle
+    addPipe();
     
     draw();
 }
