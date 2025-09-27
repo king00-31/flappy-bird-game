@@ -7,8 +7,9 @@ let animationId;
 
 // Görseller
 let backgroundImg, baseImg, pipeImg, birdImgs = [];
+let gameoverImg, messageImg, numberImgs = [];
 let imagesLoaded = 0;
-const totalImages = 6;
+const totalImages = 17; // 6 orijinal + 1 gameover + 1 message + 9 sayı
 
 // Sesler
 let wingSound, pointSound, hitSound, dieSound, swooshSound;
@@ -31,7 +32,7 @@ const birdObj = {
 
 const pipeObj = {
     width: 60,
-    gap: 200,  // Daha geniş aralık
+    gap: 120,  // Daha dar aralık - oyunu zorlaştır
     speed: 1.5  // Daha yavaş hareket
 };
 
@@ -77,6 +78,22 @@ function loadImages() {
     birdImgs[2] = new Image();
     birdImgs[2].onload = imageLoaded;
     birdImgs[2].src = 'images/yellowbird-downflap.png';
+    
+    // UI görselleri
+    gameoverImg = new Image();
+    gameoverImg.onload = imageLoaded;
+    gameoverImg.src = 'images/gameover.png';
+    
+    messageImg = new Image();
+    messageImg.onload = imageLoaded;
+    messageImg.src = 'images/message.png';
+    
+    // Sayı görselleri
+    for (let i = 0; i < 10; i++) {
+        numberImgs[i] = new Image();
+        numberImgs[i].onload = imageLoaded;
+        numberImgs[i].src = `images/Numbers/${i}.png`;
+    }
 }
 
 function imageLoaded() {
@@ -91,6 +108,7 @@ function imageLoaded() {
 // Sesleri yükle
 function loadSounds() {
     wingSound = new Audio('sounds/wing.wav');
+    wingSound.volume = 0.3; // Ses seviyesini düşür
     wingSound.oncanplaythrough = soundLoaded;
     
     pointSound = new Audio('sounds/point.wav');
@@ -122,6 +140,23 @@ window.startNewGame = function() {
     gamePaused = false;
     gameLoop();
 };
+
+// Başlangıç mesajı göster
+function drawStartMessage() {
+    if (messageImg && messageImg.complete) {
+        const imgWidth = 200;
+        const imgHeight = 100;
+        const x = (gameCanvas.width - imgWidth) / 2;
+        const y = (gameCanvas.height - imgHeight) / 2;
+        ctx.drawImage(messageImg, x, y, imgWidth, imgHeight);
+    } else {
+        // Fallback metin
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Başlamak için SPACE tuşuna basın', gameCanvas.width / 2, gameCanvas.height / 2);
+    }
+}
 
 // Oyunu sıfırla
 function resetGame() {
@@ -278,7 +313,50 @@ function gameOver() {
         localStorage.setItem('flappyBirdHighScore', highScore);
     }
     
+    // Game over ekranını çiz
+    drawGameOverScreen();
+    
     DotNet.invokeMethodAsync('FlappyBird', 'GameEnded', highScore);
+}
+
+// Game over ekranı
+function drawGameOverScreen() {
+    // Arka plan
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
+    
+    // Game over görseli
+    if (gameoverImg && gameoverImg.complete) {
+        const imgWidth = 200;
+        const imgHeight = 50;
+        const x = (gameCanvas.width - imgWidth) / 2;
+        const y = (gameCanvas.height - imgHeight) / 2 - 50;
+        ctx.drawImage(gameoverImg, x, y, imgWidth, imgHeight);
+    } else {
+        // Fallback metin
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 48px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('OYUN BİTTİ', gameCanvas.width / 2, gameCanvas.height / 2 - 50);
+    }
+    
+    // Skor gösterimi
+    if (numberImgs[0] && numberImgs[0].complete) {
+        drawNumberScore(score, gameCanvas.width / 2, gameCanvas.height / 2 + 20);
+    } else {
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 24px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Skor: ${score}`, gameCanvas.width / 2, gameCanvas.height / 2 + 20);
+    }
+    
+    // Rekor gösterimi
+    if (highScore > 0) {
+        ctx.fillStyle = '#FFD700';
+        ctx.font = 'bold 18px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`Rekor: ${highScore}`, gameCanvas.width / 2, gameCanvas.height / 2 + 60);
+    }
 }
 
 // Çizim fonksiyonu
@@ -312,6 +390,11 @@ function draw() {
     // Duraklat mesajı
     if (gamePaused) {
         drawPauseMessage();
+    }
+    
+    // Başlangıç mesajı (oyun başlamadan önce)
+    if (!gameRunning && !gamePaused) {
+        drawStartMessage();
     }
 }
 
@@ -433,10 +516,16 @@ function drawBase() {
 
 // Skor çizimi
 function drawScore() {
-    ctx.fillStyle = '#2c3e50';
-    ctx.font = 'bold 36px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText(score.toString(), gameCanvas.width / 2, 60);
+    // Sayı görselleri ile skor çizimi
+    if (numberImgs[0] && numberImgs[0].complete) {
+        drawNumberScore(score, gameCanvas.width / 2, 60);
+    } else {
+        // Fallback metin skor
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 36px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(score.toString(), gameCanvas.width / 2, 60);
+    }
     
     // Rekor skor
     if (highScore > 0) {
@@ -444,6 +533,21 @@ function drawScore() {
         ctx.font = 'bold 18px Arial';
         ctx.textAlign = 'left';
         ctx.fillText(`Rekor: ${highScore}`, 20, 30);
+    }
+}
+
+// Sayı görselleri ile skor çizimi
+function drawNumberScore(num, x, y) {
+    const numStr = num.toString();
+    const digitWidth = 24;
+    const totalWidth = numStr.length * digitWidth;
+    const startX = x - totalWidth / 2;
+    
+    for (let i = 0; i < numStr.length; i++) {
+        const digit = parseInt(numStr[i]);
+        if (numberImgs[digit] && numberImgs[digit].complete) {
+            ctx.drawImage(numberImgs[digit], startX + i * digitWidth, y - 20, digitWidth, 40);
+        }
     }
 }
 

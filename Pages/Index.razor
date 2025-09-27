@@ -37,24 +37,7 @@
         </button>
     </div>
 
-    @if (GameOver)
-    {
-        <div class="game-over">
-            <div class="card">
-                <div class="card-body">
-                    <h3>🎯 Oyun Bitti!</h3>
-                    <p>Skorunuz: @Score</p>
-                    @if (HighScore > 0)
-                    {
-                        <p class="high-score-display">🏆 Rekor: @HighScore</p>
-                    }
-                    <button class="btn btn-primary" @onclick="StartNewGame">
-                        🔄 Tekrar Oyna
-                    </button>
-                </div>
-            </div>
-        </div>
-    }
+    @* Game over ekranı artık JavaScript tarafında çiziliyor *@
 </div>
 
 @code {
