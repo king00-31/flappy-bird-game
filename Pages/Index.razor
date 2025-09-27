@@ -1,0 +1,132 @@
+@page "/"
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Flappy Bird</PageTitle>
+
+<div class="game-container">
+    <div class="game-header">
+        <button class="btn btn-primary mb-3" @onclick="StartNewGame">
+            🎮 Yeni Oyun
+        </button>
+        
+        <div class="score-display">
+            <span class="score-text">Skor: @Score</span>
+            @if (HighScore > 0)
+            {
+                <span class="high-score-text">Rekor: @HighScore</span>
+            }
+        </div>
+    </div>
+
+    <div class="game-area" @onkeydown="HandleKeyPress" tabindex="0">
+        <canvas id="gameCanvas" 
+                width="800" 
+                height="600" 
+                @onmousedown="HandleMouseClick"
+                @onkeydown="HandleKeyPress">
+        </canvas>
+    </div>
+
+    <div class="game-controls">
+        <button class="btn btn-success control-btn" @onclick="Jump">
+            🐦 Zıpla (Space)
+        </button>
+        
+        <button class="btn btn-secondary control-btn" @onclick="TogglePause">
+            ⏸️ Duraklat
+        </button>
+    </div>
+
+    @if (GameOver)
+    {
+        <div class="game-over">
+            <div class="card">
+                <div class="card-body">
+                    <h3>🎯 Oyun Bitti!</h3>
+                    <p>Skorunuz: @Score</p>
+                    @if (HighScore > 0)
+                    {
+                        <p class="high-score-display">🏆 Rekor: @HighScore</p>
+                    }
+                    <button class="btn btn-primary" @onclick="StartNewGame">
+                        🔄 Tekrar Oyna
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private int Score = 0;
+    private int HighScore = 0;
+    private bool GameOver = false;
+    private bool IsPaused = false;
+    private bool GameStarted = false;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("initializeGame");
+        }
+    }
+
+    private async Task StartNewGame()
+    {
+        Score = 0;
+        GameOver = false;
+        IsPaused = false;
+        GameStarted = true;
+        
+        await JSRuntime.InvokeVoidAsync("startNewGame");
+        StateHasChanged();
+    }
+
+    private async Task Jump()
+    {
+        if (GameStarted && !GameOver && !IsPaused)
+        {
+            await JSRuntime.InvokeVoidAsync("jumpBird");
+        }
+    }
+
+    private async Task TogglePause()
+    {
+        IsPaused = !IsPaused;
+        await JSRuntime.InvokeVoidAsync("togglePause", IsPaused);
+        StateHasChanged();
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == " " || e.Key == "Space")
+        {
+            await Jump();
+        }
+    }
+
+    private async Task HandleMouseClick(MouseEventArgs e)
+    {
+        await Jump();
+    }
+
+    [JSInvokable]
+    public void UpdateScore(int newScore)
+    {
+        Score = newScore;
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void GameEnded(int newHighScore = 0)
+    {
+        GameOver = true;
+        GameStarted = false;
+        if (newHighScore > HighScore)
+        {
+            HighScore = newHighScore;
+        }
+        StateHasChanged();
+    }
+}

@@ -1,0 +1,177 @@
+/* Flappy Bird Oyun Stilleri */
+.game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.game-header {
+    margin-bottom: 20px;
+}
+
+.score-display {
+    margin: 15px 0;
+}
+
+.score-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.high-score-text {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    display: block;
+}
+
+.high-score-display {
+    font-size: 20px;
+    font-weight: bold;
+    color: #f39c12;
+    margin: 10px 0;
+}
+
+.game-area {
+    position: relative;
+    display: inline-block;
+    border: 3px solid #34495e;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #90EE90 100%);
+}
+
+#gameCanvas {
+    display: block;
+    cursor: pointer;
+    background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #90EE90 100%);
+}
+
+.game-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.control-btn {
+    min-width: 120px;
+}
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    text-align: center;
+}
+
+.game-over h3 {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 28px;
+}
+
+.game-over p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+/* Bootstrap buton stilleri */
+.btn {
+    border-radius: 8px !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    padding: 10px 20px !important;
+    margin: 5px !important;
+}
+
+.btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #3498db, #2980b9) !important;
+    border: none !important;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #27ae60, #229954) !important;
+    border: none !important;
+}
+
+.btn-secondary {
+    background: linear-gradient(45deg, #95a5a6, #7f8c8d) !important;
+    border: none !important;
+}
+
+.card {
+    border-radius: 15px !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1) !important;
+    border: none !important;
+}
+
+/* Responsive tasarım */
+@media (max-width: 768px) {
+    .game-container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+    }
+    
+    .game-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .control-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Animasyonlar */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+.bounce {
+    animation: bounce 1s;
+}
+
+/* Oyun alanı odaklanma efekti */
+.game-area:focus {
+    outline: 3px solid #3498db;
+    outline-offset: 2px;
+}
