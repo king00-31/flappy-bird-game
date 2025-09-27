@@ -1,54 +1,86 @@
 /* Flappy Bird Oyun Stilleri */
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .game-container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 25px;
     text-align: center;
-    background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, rgba(135, 206, 235, 0.9) 0%, rgba(152, 251, 152, 0.9) 100%);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.game-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+    animation: float 20s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(30px, -30px) rotate(120deg); }
+    66% { transform: translate(-20px, 20px) rotate(240deg); }
 }
 
 .game-header {
     margin-bottom: 20px;
 }
 
-.score-display {
-    margin: 15px 0;
-}
-
-.score-text {
-    font-size: 24px;
-    font-weight: bold;
-    color: #2c3e50;
-    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
-    display: block;
-    margin-bottom: 5px;
-}
-
-.high-score-text {
-    font-size: 18px;
-    font-weight: bold;
-    color: #e74c3c;
-    text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
-    display: block;
-}
+/* Gereksiz skor display kaldırıldı */
 
 .high-score-display {
     font-size: 20px;
     font-weight: bold;
     color: #f39c12;
-    margin: 10px 0;
+    margin: 15px 0;
+    text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+    background: linear-gradient(45deg, #f39c12, #e67e22);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 2px 2px 4px rgba(255,255,255,0.8), 0 0 10px rgba(243, 156, 18, 0.5); }
+    to { text-shadow: 2px 2px 4px rgba(255,255,255,0.8), 0 0 20px rgba(243, 156, 18, 0.8); }
 }
 
 .game-area {
     position: relative;
     display: inline-block;
-    border: 3px solid #34495e;
-    border-radius: 10px;
+    border: 4px solid #2c3e50;
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #90EE90 100%);
+    transform: perspective(1000px) rotateX(2deg);
+    transition: transform 0.3s ease;
+}
+
+.game-area:hover {
+    transform: perspective(1000px) rotateX(0deg);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.4);
 }
 
 #gameCanvas {
@@ -96,16 +128,34 @@
 
 /* Bootstrap buton stilleri */
 .btn {
-    border-radius: 8px !important;
+    border-radius: 12px !important;
     font-weight: bold !important;
     transition: all 0.3s ease !important;
-    padding: 10px 20px !important;
-    margin: 5px !important;
+    padding: 12px 24px !important;
+    margin: 8px !important;
+    font-size: 16px !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
 }
 
 .btn:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+    transform: translateY(-3px) scale(1.05) !important;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
 }
 
 .btn-primary {

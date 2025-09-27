@@ -9,13 +9,12 @@
             🎮 Yeni Oyun
         </button>
         
-        <div class="score-display">
-            <span class="score-text">Skor: @Score</span>
-            @if (HighScore > 0)
-            {
-                <span class="high-score-text">Rekor: @HighScore</span>
-            }
-        </div>
+        @if (HighScore > 0)
+        {
+            <div class="high-score-display">
+                <span class="high-score-text">🏆 Rekor: @HighScore</span>
+            </div>
+        }
     </div>
 
     <div class="game-area" @onkeydown="HandleKeyPress" tabindex="0">
