@@ -1,5 +1,11 @@
 # Flappy Bird Game
+İsim Soyisim: Selameddin Tirit
+No:240541035
+Bölüm/Fakülte:Yazılım mühendisliği/Teknoloji mühendisliği
+Sınıf/Şube:2/A
 
+Oyunu canlıda oynayabilmeniz için gereken aders: https://flappy-bird-game-o1kk.onrender.com
+NOT: adrese girdikten sonra siteyi deploy edeceği için biraz beklemenizi öneririm ve oyun ekranı geldiğinde yeni oyun butonuna basınız
 ## 🎮 Oyun Hakkında
 
 Bu proje, **C# Blazor Server** teknolojisi kullanılarak geliştirilmiş modern bir Flappy Bird oyunudur. Oyun, klasik Flappy Bird mekaniklerini koruyarak, web tabanlı bir platformda akıcı bir deneyim sunar.
